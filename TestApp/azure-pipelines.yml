@@ -1,0 +1,15 @@
+trigger:
+ branches:
+   include:
+   - master
+
+resources:
+   repositories:
+     - repository: templates
+       type: git
+       name: Broendby Azure/BuildTemplates
+
+stages:
+- template: WIP/build-msix-net8.yml@templates #CI/build-msix.yml@templates
+  parameters:
+    solutionFileName: TestApp.sln

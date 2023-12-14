@@ -3,13 +3,32 @@ trigger:
    include:
    - master
 
-resources:
-   repositories:
-     - repository: templates
-       type: git
-       name: Broendby Azure/BuildTemplates
-
 stages:
-- template: WIP/build-msix-net8.yml@templates #CI/build-msix.yml@templates
-  parameters:
-    solutionFileName: TestApp.sln
+- stage: Build
+
+  jobs:  
+
+  - job: Build
+    displayName: "Build app and installer"
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+
+    - task: VSBuild@1
+      inputs:
+        solution: 'TestApp.sln'
+        vsVersion: 'latest'
+        platform: 'x64'
+        configuration: 'Release'
+        msbuildArchitecture: 'x64'
+        msbuildArgs: '/t:Restore /p:RuntimeIdentifier=win-x64'
+
+    - task: VSBuild@1
+      inputs:
+        solution: 'TestApp.sln'
+        vsVersion: 'latest'
+        platform: 'x64'
+        configuration: 'Release' 
+        msbuildArchitecture: 'x64'
+        msbuildArgs: ''
